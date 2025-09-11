@@ -4,23 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class OrganizationManager extends Model
 {
     protected $fillable = [
         'organization_id',
-        'name',
-        'description',
-        'location',
-        'capacity',
-        'max_invitees',
-        'starts_at',
-        'finishes_at',
-        'banner',
-        'status'
+        'user_id',
     ];
 
     public function organization()
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

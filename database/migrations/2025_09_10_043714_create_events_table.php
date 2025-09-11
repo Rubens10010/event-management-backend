@@ -14,15 +14,16 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
+            $table->text('name');
             $table->text('description')->nullable();
+            $table->text('location');
             $table->enum('status', ['PENDING', 'REGISTERING', 'WAITING', 'ONGOING', 'FINISHED']);
-            $table->integer('max_participants');
-            $table->integer('invitees')->default(0);
-            $table->string('location');
+            $table->integer('capacity');
+            $table->integer('max_invitees')->default(0);
             $table->binary('banner')->nullable();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('starts_at');
+            $table->dateTime('finishes_at');
             $table->timestamps();
         });
 

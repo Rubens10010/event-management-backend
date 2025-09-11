@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
+            $table->foreignId('team_id')->nullable()->constrained('teams')->onDelete('set null');
+            $table->char('ndoc', 10);
+            $table->text('full_name');
+            $table->text('email')->nullable();
+            $table->char('phone', 9)->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
     }

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class Registration extends Model
 {
     protected $fillable = [
-        'organization_id',
-        'name',
+        'participant_id',
+        'approved_by',
+        'qr_code'
     ];
 }

@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class EventGatekeeper extends Model
 {
     protected $fillable = [
-        'organization_id',
-        'name',
+        'event_id',
+        'user_id',
     ];
 }
