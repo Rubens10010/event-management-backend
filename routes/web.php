@@ -1,14 +1,24 @@
 <?php
 
+use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\ConfinementController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventGatekeeperController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamTextController;
+use App\Http\Controllers\InviteeController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MatrixController;
 use App\Http\Controllers\MatrixDetailController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationManagerController;
+use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TeamManagerController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\RequireMasterKey;
 use Illuminate\Http\Request;
@@ -28,14 +38,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'show']);
 
     Route::apiResources([
-        'processes' => ProcessController::class,
-        'matrices' => MatrixController::class,
-        'levels' => LevelController::class,
-        'blocks' => BlockController::class,
-        'matrix_details' => MatrixDetailController::class,
-        'confinements' => ConfinementController::class,
-        'exams' => ExamController::class,
-        'exam_texts' => ExamTextController::class,
+        'organizations' => OrganizationController::class,
+        'teams' => TeamController::class,
+        'events' => EventController::class,
+        'participants' => ParticipantController::class,
+        'registrations' => RegistrationController::class,
+        'invitees' => InviteeController::class,
+        'access_logs' => AccessLogController::class,
+        'event_gatekeepers' => EventGatekeeperController::class,
+        'organization_managers' => OrganizationManagerController::class,
+        'team_managers' => TeamManagerController::class,
     ]);
 
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
