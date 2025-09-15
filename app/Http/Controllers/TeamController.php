@@ -61,4 +61,15 @@ class TeamController extends Controller
         $team->delete();
         return response()->json(null, 204);
     }
+
+    public function getTeamsForManager(Request $request)
+    {
+        $user = $request->user();
+
+        $teams = Team::whereHas('team_managers', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->orderBy('name')->distinct()->get();
+
+        return response()->json($teams, 200);
+    }
 }

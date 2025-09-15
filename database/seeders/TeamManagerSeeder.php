@@ -2,21 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\Process;
-use App\Models\User;
+use App\Models\TeamManager;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class ProcessSeeder extends Seeder
+// Run seeder: php artisan db:seed --class=OrganizationSeeder
+class TeamManagerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $process = Process::create([
-            'name' => 'Ordinario',
+        $org = TeamManager::create([
+            'team_id' => 1,
+            'user_id' => 1,
         ]);
     }
 }

@@ -10,4 +10,14 @@ class Team extends Model
         'organization_id',
         'name',
     ];
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
+    public function team_managers()
+    {
+        return $this->hasMany(TeamManager::class);
+    }
 }

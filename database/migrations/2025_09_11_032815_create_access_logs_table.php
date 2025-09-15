@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('access_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('registration_id')->constrained('registrations')->onDelete('cascade');
+            $table->foreignUuid('participant_id')->constrained('participants')->onDelete('cascade');
             $table->enum('person_type', ['PARTICIPANT', 'INVITEE']);
             $table->char('ndoc', 10);
             $table->foreignId('gatekeeper_id')->constrained('event_gatekeepers')->onDelete('cascade');

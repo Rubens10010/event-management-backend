@@ -10,4 +10,14 @@ class Organization extends Model
         'name',
         'logo'
     ];
+
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    public function managers()
+    {
+        return $this->belongsToMany(User::class, 'organization_managers');
+    }
 }

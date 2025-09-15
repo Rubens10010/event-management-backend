@@ -16,7 +16,6 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationManagerController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\ProcessController;
-use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamManagerController;
 use App\Http\Controllers\UserController;
@@ -34,15 +33,17 @@ Route::get('/', function () {
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 //});
 
+Route::get('teams', [TeamController::class, 'index']);
+Route::post('participants', [ParticipantController::class, 'store']);
+Route::get('participants/{participant}', [ParticipantController::class, 'show']);
+Route::get('participants/ndoc/{ndoc}', [ParticipantController::class, 'getByNdoc']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'show']);
 
     Route::apiResources([
         'organizations' => OrganizationController::class,
-        'teams' => TeamController::class,
         'events' => EventController::class,
-        'participants' => ParticipantController::class,
-        'registrations' => RegistrationController::class,
         'invitees' => InviteeController::class,
         'access_logs' => AccessLogController::class,
         'event_gatekeepers' => EventGatekeeperController::class,
@@ -50,7 +51,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'team_managers' => TeamManagerController::class,
     ]);
 
-    Route::post('/reset-password', [UserController::class, 'resetPassword']);
-});
+    // Protected routes for teams (everything except index)
+    Route::apiResource('teams', TeamController::class)->except(['index']);
+    Route::apiResource('participants', ParticipantController::class)->except(['store', 'show']);
 
-Route::get('/matrix/{matrix_id}/export', [MatrixController::class, 'exportBlocks']);
+    Route::get('manager/teams', [TeamController::class, 'getTeamsForManager']);
+
+    Route::post('/reset-password', [UserController::class, 'resetPassword']);
+
+    Route::post('/logout', [LoginController::class, 'logout']);
+});

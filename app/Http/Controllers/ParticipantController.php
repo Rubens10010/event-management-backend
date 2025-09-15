@@ -21,7 +21,18 @@ class ParticipantController extends Controller
      */
     public function store(StoreParticipantRequest $request)
     {
-        $participant = Participant::create($request->validated());
+        if ($request->user()) {
+            $request->merge(['approved_by' => $request->user()->id]);
+        }
+        $participant = Participant::create($request->only([
+            'event_id',
+            'team_id',
+            'ndoc',
+            'full_name',
+            'email',
+            'phone',
+            'approved_by'
+        ]));
         return response()->json($participant, 201);
     }
 
@@ -31,6 +42,16 @@ class ParticipantController extends Controller
     public function show(Participant $participant)
     {
         return $participant;
+    }
+
+    public function getByNdoc($ndoc)
+    {
+        $participant = Participant::where('ndoc', $ndoc)->first();
+        if ($participant) {
+            return response()->json($participant, 200);
+        } else {
+            return response()->json(['message' => 'Participant not found'], 404);
+        }
     }
 
     /**

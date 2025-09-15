@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invitees', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('participant_id')->constrained('participants')->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('participant_id')->constrained('participants')->onDelete('cascade');
             $table->char('ndoc', 10);
             $table->text('full_name');
             $table->text('email')->nullable();
