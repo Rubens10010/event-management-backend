@@ -20,4 +20,9 @@ class Team extends Model
     {
         return $this->hasMany(TeamManager::class);
     }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
 }

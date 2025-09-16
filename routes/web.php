@@ -56,6 +56,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('participants', ParticipantController::class)->except(['store', 'show']);
 
     Route::get('manager/teams', [TeamController::class, 'getTeamsForManager']);
+    Route::get('organization/{organizationId}/event/{eventId}/teams', [TeamController::class, 'getTeamsForOrganization']);
+    Route::get('team/{teamId}/managers', [TeamController::class, 'getManagersForTeam']);
+    Route::get('event/{eventId}/team/{teamId}/participants', [TeamController::class, 'getParticipantsForEvent']);
 
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
 

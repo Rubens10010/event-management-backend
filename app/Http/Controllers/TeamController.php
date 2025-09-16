@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Participant;
 use App\Models\Team;
 use Illuminate\Http\Request;
 
@@ -71,5 +72,33 @@ class TeamController extends Controller
         })->orderBy('name')->distinct()->get();
 
         return response()->json($teams, 200);
+    }
+
+    public function getTeamsForOrganization($organizationId, $eventId)
+    {
+        $teams = Team::withCount(['team_managers', 'participants' => fn($q) => $q->where('event_id', $eventId)])->where('organization_id', $organizationId)
+            ->orderBy('name')
+            ->get();
+
+        return response()->json($teams, 200);
+    }
+
+    public function getManagersForTeam($teamId)
+    {
+        $team = Team::with('team_managers.user')->find($teamId);
+        if (!$team) {
+            return response()->json(['message' => 'Team not found'], 404);
+        }
+        return response()->json($team->team_managers, 200);
+    }
+
+    public function getParticipantsForEvent($eventId, $teamId)
+    {
+        $participants = Participant::where('event_id', $eventId)
+            ->where('team_id', $teamId)
+            ->orderBy('full_name')
+            ->get();
+
+        return response()->json($participants, 200);
     }
 }
