@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
             $table->text('name');
+            $table->smallInteger('max_participants')->default(0);
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamManagerController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\RequireMasterKey;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('manager/teams', [TeamController::class, 'getTeamsForManager']);
     Route::get('organization/{organizationId}/event/{eventId}/teams', [TeamController::class, 'getTeamsForOrganization']);
-    Route::get('team/{teamId}/managers', [TeamController::class, 'getManagersForTeam']);
+    Route::get('teams/{teamId}/managers', [TeamController::class, 'getManagersForTeam']);
     Route::get('event/{eventId}/team/{teamId}/participants', [TeamController::class, 'getParticipantsForEvent']);
+    Route::get('teams/{team}/users-available', [TeamController::class, 'getUsersAvailableForTeam']);
+
+    Route::post('teams/{team}/managers', [TeamManagerController::class, 'storeManagerUser']);
 
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
 

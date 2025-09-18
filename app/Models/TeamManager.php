@@ -9,6 +9,7 @@ class TeamManager extends Model
     protected $fillable = [
         'team_id',
         'user_id',
+        'assigned_by',
     ];
 
     public function team()

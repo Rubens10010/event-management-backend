@@ -17,7 +17,8 @@ class TeamManagerSeeder extends Seeder
     {
         $org = TeamManager::create([
             'team_id' => 1,
-            'user_id' => 1,
+            'user_id' => 4,
+            'assigned_by' => 1,
         ]);
     }
 }

@@ -21,6 +21,7 @@ class TeamSeeder extends Seeder
             Team::create([
                 'name' => (string) $year,
                 'organization_id' => 1,
+                'max_participants' => 50,
             ]);
         }
     }

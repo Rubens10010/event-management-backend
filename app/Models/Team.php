@@ -9,6 +9,7 @@ class Team extends Model
     protected $fillable = [
         'organization_id',
         'name',
+        'max_participants',
     ];
 
     public function organization()
@@ -24,5 +25,10 @@ class Team extends Model
     public function participants()
     {
         return $this->hasMany(Participant::class);
+    }
+
+    public function managers()
+    {
+        return $this->hasManyThrough(User::class, TeamManager::class, 'team_id', 'id', 'id', 'user_id');
     }
 }

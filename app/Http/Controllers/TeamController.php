@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Participant;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TeamController extends Controller
@@ -100,5 +101,23 @@ class TeamController extends Controller
             ->get();
 
         return response()->json($participants, 200);
+    }
+
+    public function getUsersAvailableForTeam($teamId)
+    {
+        $team = Team::find($teamId);
+        if (!$team) {
+            return response()->json(['message' => 'Team not found'], 404);
+        }
+
+        $assignedUserIds = $team->team_managers()->pluck('user_id')->toArray();
+
+        $availableUsers = User::where('organization_id', $team->organization_id)
+            ->whereNotIn('id', $assignedUserIds)
+            ->where('role', 'manager')
+            ->orderBy('name')
+            ->get();
+
+        return response()->json($availableUsers, 200);
     }
 }
