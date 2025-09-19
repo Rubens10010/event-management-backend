@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('invitees', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('participant_id')->constrained('participants')->onDelete('cascade');
-            $table->char('ndoc', 10);
+            $table->char('ndoc', 10)->nullable()->unique();
             $table->text('full_name');
             $table->text('email')->nullable();
             $table->char('phone', 9)->nullable();

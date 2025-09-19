@@ -17,7 +17,7 @@ class TeamSeeder extends Seeder
     {
         $currentYear = (int) date('Y');
 
-        foreach (range(1960, $currentYear) as $year) {
+        foreach (range(1986, $currentYear - 1) as $year) {
             Team::create([
                 'name' => (string) $year,
                 'organization_id' => 1,

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignUuid('participant_id')->constrained('participants')->onDelete('cascade');
             $table->enum('person_type', ['PARTICIPANT', 'INVITEE']);
             $table->char('ndoc', 10);
-            $table->foreignId('gatekeeper_id')->constrained('event_gatekeepers')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users');
             $table->enum('action', ['ENTRY', 'EXIT']);
             $table->timestamps();
         });

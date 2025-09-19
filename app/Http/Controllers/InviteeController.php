@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitee;
+use App\Models\Participant;
 use Illuminate\Http\Request;
 
 class InviteeController extends Controller
@@ -15,6 +16,11 @@ class InviteeController extends Controller
         return Invitee::all();
     }
 
+    public function getFromParticipant($participantId)
+    {
+        return Invitee::where('participant_id', $participantId)->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -22,10 +28,10 @@ class InviteeController extends Controller
     {
         $validated = $request->validate([
             'participant_id' => 'required|exists:participants,id',
-            'ndoc' => 'required|string|max:10|unique:invitees,ndoc',
             'full_name' => 'required|string|max:255',
+            'ndoc' => 'nullable|string|size:8|unique:invitees,ndoc',
             'email' => 'nullable|email|max:255|unique:invitees,email',
-            'phone' => 'nullable|string|max:9',
+            'phone' => 'nullable|string|size:9',
         ]);
 
         $invitee = Invitee::create($validated);
@@ -46,7 +52,7 @@ class InviteeController extends Controller
     public function update(Request $request, Invitee $invitee)
     {
         $validated = $request->validate([
-            'ndoc' => 'required|string|max:10|unique:invitees,ndoc,' . $invitee->id,
+            'ndoc' => 'required|string|size:8|unique:invitees,ndoc,' . $invitee->id,
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:invitees,email,' . $invitee->id,
             'phone' => 'nullable|string|max:9',
@@ -59,8 +65,9 @@ class InviteeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Invitee $invitee)
+    public function destroy(Participant $participant, Invitee $invitee)
     {
+        if ($participant->id != $invitee->participant_id) abort(403, "No puede eliminar un invitado de otro participante");
         $invitee->delete();
         return response()->noContent();
     }

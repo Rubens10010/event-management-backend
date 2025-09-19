@@ -23,7 +23,10 @@ class ParticipantController extends Controller
     {
         if ($request->user()) {
             $request->merge(['approved_by' => $request->user()->id]);
+        } else {
+            $request->merge(['approved_by' => 1]);  // admin por defecto
         }
+
         $participant = Participant::create($request->only([
             'event_id',
             'team_id',
@@ -31,8 +34,12 @@ class ParticipantController extends Controller
             'full_name',
             'email',
             'phone',
-            'approved_by'
+            'approved_by',
         ]));
+
+        $participant->qr_code = $participant->id . '-' . time();
+        $participant->save();
+
         return response()->json($participant, 201);
     }
 
@@ -41,7 +48,8 @@ class ParticipantController extends Controller
      */
     public function show(Participant $participant)
     {
-        return $participant;
+        // load
+        return $participant->load(['team' => fn($q) => $q->withCount('participants')]);
     }
 
     public function getByNdoc($ndoc)

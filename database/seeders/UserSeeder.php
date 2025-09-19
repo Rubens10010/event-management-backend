@@ -19,23 +19,23 @@ class UserSeeder extends Seeder
     {
         $user = User::factory()->create([
             'name' => 'Admin 1',
-            'email' => 'admin1@unsa.edu.pe',
+            'email' => 'admin@gmail.com',
             'password' => '12345678',
             'role' => 'admin',
         ]);
 
         $organization = User::factory()->create([
-            'name' => 'Organization 1',
-            'email' => 'organization1@unsa.edu.pe',
+            'name' => 'Padre Francois Delatte',
+            'email' => 'padre.francois.delatte@gmail.com',
             'password' => '87654321',
             'role' => 'organization',
             'organization_id' => 1,
         ]);
 
         $supervisor = User::factory()->create([
-            'name' => 'Supervisor 1',
-            'email' => 'supervisor1@unsa.edu.pe',
-            'password' => '12345678',
+            'name' => 'Zenaida Porroa Huayna',
+            'email' => 'tvzenaida@gmail.com',
+            'password' => 'controlEventoFrancois25',
             'role' => 'supervisor',
             'organization_id' => 1,
         ]);
@@ -45,6 +45,14 @@ class UserSeeder extends Seeder
             'email' => 'manager1@unsa.edu.pe',
             'password' => '87654321',
             'role' => 'manager',
+            'organization_id' => 1,
+        ]);
+
+        $controller = User::factory()->create([
+            'name' => 'Controlador',
+            'email' => 'controller@gmail.com',
+            'password' => '87654321',
+            'role' => 'controller',
             'organization_id' => 1,
         ]);
     }

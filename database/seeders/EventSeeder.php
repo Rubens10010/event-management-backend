@@ -19,11 +19,11 @@ class EventSeeder extends Seeder
             'organization_id' => 1,
             'name' => 'Reencuentro de Promociones',
             'description' => 'Evento para el reencuentro de las promociones de egresados.',
-            'location' => 'Club La Campiña',
-            'capacity' => 200,
+            'location' => 'Club Sub Cafae Av. Salaverry 502 Lara-Socabaya',
+            'capacity' => 1300,
             'max_invitees' => 5,
-            'starts_at' => '2025-12-20 19:00:00',
-            'finishes_at' => '2025-12-20 23:00:00',
+            'starts_at' => '2025-10-05 10:00:00',
+            'finishes_at' => '2025-10-05 23:00:00',
             'status' => 'REGISTERING'
         ]);
     }

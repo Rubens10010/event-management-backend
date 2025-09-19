@@ -38,6 +38,9 @@ Route::get('teams', [TeamController::class, 'index']);
 Route::post('participants', [ParticipantController::class, 'store']);
 Route::get('participants/{participant}', [ParticipantController::class, 'show']);
 Route::get('participants/ndoc/{ndoc}', [ParticipantController::class, 'getByNdoc']);
+Route::get('participants/{participant}/invitees', [InviteeController::class, 'getFromParticipant']);
+Route::apiResource('invitees', InviteeController::class)->except('destroy');
+Route::delete('participants/{participant}/invitees/{invitee}', [InviteeController::class, 'destroy']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'show']);
@@ -45,7 +48,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResources([
         'organizations' => OrganizationController::class,
         'events' => EventController::class,
-        'invitees' => InviteeController::class,
         'access_logs' => AccessLogController::class,
         'event_gatekeepers' => EventGatekeeperController::class,
         'organization_managers' => OrganizationManagerController::class,
