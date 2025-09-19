@@ -12,9 +12,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'http://localhost:3000',
-    ],
+    'allowed_origins' => [env('FRONTEND_URL'), 'http://localhost:3000', 'https://www.paseconfiable.com'],
 
     'allowed_origins_patterns' => [],
 
