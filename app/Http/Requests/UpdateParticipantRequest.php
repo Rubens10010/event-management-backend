@@ -23,10 +23,10 @@ class UpdateParticipantRequest extends FormRequest
     {
         return [
             'team_id' => 'nullable|exists:teams,id',
-            'ndoc' => 'required|string|max:10|unique:participants,ndoc,' . $this->participant->id,
+            'ndoc' => 'required|digits:8|unique:participants,ndoc,' . $this->participant->id,
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:participants,email,' . $this->participant->id,
-            'phone' => 'nullable|string|max:9',
+            'phone' => 'nullable|digits:9',
         ];
     }
 }

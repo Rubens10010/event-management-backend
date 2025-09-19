@@ -56,8 +56,8 @@ class InviteeController extends Controller
     public function update(Request $request, Invitee $invitee)
     {
         $validated = $request->validate([
-            'ndoc' => 'required|string|size:8|unique:invitees,ndoc,' . $invitee->id,
             'full_name' => 'required|string|max:255',
+            'ndoc' => 'nullable|string|size:8|unique:invitees,ndoc,' . $invitee->id,
             'email' => 'nullable|email|max:255|unique:invitees,email,' . $invitee->id,
             'phone' => 'nullable|string|max:9',
         ]);

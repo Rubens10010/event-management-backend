@@ -24,10 +24,10 @@ class StoreParticipantRequest extends FormRequest
         return [
             'event_id' => 'required|exists:events,id',
             'team_id' => 'nullable|exists:teams,id',
-            'ndoc' => 'required|string|max:10|unique:participants,ndoc',
+            'ndoc' => 'required|digits:8|unique:participants,ndoc',
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:participants,email',
-            'phone' => 'nullable|string|max:9',
+            'phone' => 'nullable|digits:9',
         ];
     }
 }
