@@ -34,7 +34,11 @@ class InviteeController extends Controller
             'phone' => 'nullable|string|size:9',
         ]);
 
+        $n_invitees = Invitee::where('participant_id', $request->participant_id)->count();
+        if ($n_invitees >= 5) abort(403, "Solo puede tener 5 invitados como maximo");
+
         $invitee = Invitee::create($validated);
+
         return response()->json($invitee, 201);
     }
 

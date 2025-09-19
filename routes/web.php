@@ -49,7 +49,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         'organizations' => OrganizationController::class,
         'events' => EventController::class,
         'access_logs' => AccessLogController::class,
-        'event_gatekeepers' => EventGatekeeperController::class,
         'organization_managers' => OrganizationManagerController::class,
         'team_managers' => TeamManagerController::class,
     ]);
