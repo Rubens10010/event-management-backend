@@ -120,4 +120,10 @@ class TeamController extends Controller
 
         return response()->json($availableUsers, 200);
     }
+
+
+    public function getReport()
+    {
+        return Team::withCount(['participants', 'invitees'])->get();
+    }
 }

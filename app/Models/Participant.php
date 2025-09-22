@@ -48,4 +48,6 @@ class Participant extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    public function invitees() { return $this->hasMany(Invitee::class); }
 }

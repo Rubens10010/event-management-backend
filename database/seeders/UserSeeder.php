@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
             'organization_id' => 1,
         ]);
 
-        $manager = User::factory()->create([
+        /*$manager = User::factory()->create([
             'name' => 'Manager 1',
             'email' => 'manager1@unsa.edu.pe',
             'password' => '87654321',
@@ -54,6 +54,6 @@ class UserSeeder extends Seeder
             'password' => '87654321',
             'role' => 'controller',
             'organization_id' => 1,
-        ]);
+        ]);*/
     }
 }
