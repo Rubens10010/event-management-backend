@@ -15,10 +15,10 @@ class TeamManagerSeeder extends Seeder
      */
     public function run(): void
     {
-        /*$org = TeamManager::create([
+        $org = TeamManager::create([
             'team_id' => 1,
             'user_id' => 4,
             'assigned_by' => 1,
-        ]);*/
+        ]);
     }
 }

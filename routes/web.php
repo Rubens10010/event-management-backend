@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ]);
 
     Route::get('teams/report', [TeamController::class, 'getReport']);
+    Route::get('controller/participants/validate', [ParticipantController::class, 'validate']);
 
     // Protected routes for teams (everything except index)
     Route::apiResource('teams', TeamController::class)->except(['index']);

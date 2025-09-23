@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\Participant;
+use Illuminate\Http\Request;
 
 class ParticipantController extends Controller
 {
@@ -78,5 +79,28 @@ class ParticipantController extends Controller
     {
         $participant->delete();
         return response()->json(null, 204);
+    }
+
+    public function validate(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string'
+        ]);
+
+        // Get code and strip the timestamp part if present
+        $rawCode = $request->input('code');
+
+        $participant = Participant::where('qr_code', $rawCode)->first();
+
+        if ($participant) {
+            return response()->json([
+                'authorized' => true,
+                'participantId' => $participant->id,
+            ], 200);
+        }
+
+        return response()->json([
+            'authorized' => false,
+        ], 200);
     }
 }
