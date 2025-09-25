@@ -95,7 +95,8 @@ class TeamController extends Controller
 
     public function getParticipantsForEvent($eventId, $teamId)
     {
-        $participants = Participant::withCount('invitees')
+        $participants = Participant::with('team')
+            ->withCount('invitees')
             ->where('event_id', $eventId)
             ->where('team_id', $teamId)
             ->orderBy('full_name')

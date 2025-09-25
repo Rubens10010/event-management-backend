@@ -89,11 +89,9 @@ class ParticipantController extends Controller
         ]);
 
         $code = $request->input('code');
-        $participant = Participant::where('qr_code', $code)->first();
+        $participant = Participant::with('invitees', 'team')->where('qr_code', $code)->first();
 
         if ($participant) {
-            $participant->load('invitees');
-
             return response()->json([
                 'authorized' => true,
                 'participant' => $participant,
@@ -112,10 +110,9 @@ class ParticipantController extends Controller
         ]);
 
         $dni = $request->input('dni');
-        $participant = Participant::where('ndoc', $dni)->first();
+        $participant = Participant::with('invitees', 'team')->where('ndoc', $dni)->first();
 
         if ($participant) {
-            $participant->load('invitees', 'team');
             return response()->json([
                 'authorized' => true,
                 'participant' => $participant,
