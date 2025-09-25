@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
+use App\Models\Invitee;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 
@@ -84,18 +85,62 @@ class ParticipantController extends Controller
     public function validate(Request $request)
     {
         $request->validate([
-            'code' => 'required|string'
+            'code' => 'required|string',
         ]);
 
-        // Get code and strip the timestamp part if present
-        $rawCode = $request->input('code');
-
-        $participant = Participant::where('qr_code', $rawCode)->first();
+        $code = $request->input('code');
+        $participant = Participant::where('qr_code', $code)->first();
 
         if ($participant) {
+            $participant->load('invitees');
+
             return response()->json([
                 'authorized' => true,
-                'participantId' => $participant->id,
+                'participant' => $participant,
+            ], 200);
+        }
+
+        return response()->json([
+            'authorized' => false,
+        ], 200);
+    }
+
+    public function validateDni(Request $request)
+    {
+        $request->validate([
+            'dni' => 'required|digits:8',
+        ]);
+
+        $dni = $request->input('dni');
+        $participant = Participant::where('ndoc', $dni)->first();
+
+        if ($participant) {
+            $participant->load('invitees', 'team');
+            return response()->json([
+                'authorized' => true,
+                'participant' => $participant,
+            ], 200);
+        }
+
+        return response()->json([
+            'authorized' => false,
+        ], 200);
+    }
+
+    public function validateInvitee(Request $request)
+    {
+        $request->validate([
+            'dni' => 'required|digits:8',
+        ]);
+
+        $dni = $request->input('dni');
+        $invitee = Invitee::where('ndoc', $dni)->first();
+
+        if ($invitee) {
+            $invitee->load('participant');
+            return response()->json([
+                'authorized' => true,
+                'invitee' => $invitee,
             ], 200);
         }
 
