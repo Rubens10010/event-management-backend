@@ -17,6 +17,11 @@ class TeamController extends Controller
         return Team::all();
     }
 
+    public function indexOpen()
+    {
+        return Team::where('open_registration', true)->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      */

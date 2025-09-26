@@ -10,6 +10,7 @@ class Team extends Model
         'organization_id',
         'name',
         'max_participants',
+        'open_registration'
     ];
 
     public function organization()
@@ -27,7 +28,10 @@ class Team extends Model
         return $this->hasMany(Participant::class);
     }
 
-    public function invitees() { return $this->hasManyThrough( Invitee::class, Participant::class, 'team_id',  'participant_id', 'id', 'id' ); }
+    public function invitees()
+    {
+        return $this->hasManyThrough(Invitee::class, Participant::class, 'team_id',  'participant_id', 'id', 'id');
+    }
 
     public function managers()
     {

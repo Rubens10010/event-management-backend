@@ -34,7 +34,7 @@ Route::get('/', function () {
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 //});
 
-Route::get('teams', [TeamController::class, 'index']);
+Route::get('available-teams', [TeamController::class, 'indexOpen']);
 Route::post('participants', [ParticipantController::class, 'store']);
 Route::get('participants/{participant}', [ParticipantController::class, 'show']);
 Route::get('participants/ndoc/{ndoc}', [ParticipantController::class, 'getByNdoc']);
@@ -45,21 +45,21 @@ Route::delete('participants/{participant}/invitees/{invitee}', [InviteeControlle
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'show']);
 
+    Route::get('teams/report', [TeamController::class, 'getReport']);
+
     Route::apiResources([
         'organizations' => OrganizationController::class,
         'events' => EventController::class,
         'access_logs' => AccessLogController::class,
         'organization_managers' => OrganizationManagerController::class,
         'team_managers' => TeamManagerController::class,
+        'teams' => TeamController::class
     ]);
 
-    Route::get('teams/report', [TeamController::class, 'getReport']);
     Route::get('controller/participants/validate', [ParticipantController::class, 'validate']);
     Route::get('controller/participants/validate-dni', [ParticipantController::class, 'validateDni']);
     Route::get('controller/participants/validate-invitee', [ParticipantController::class, 'validateInvitee']);
 
-    // Protected routes for teams (everything except index)
-    Route::apiResource('teams', TeamController::class)->except(['index']);
     Route::apiResource('participants', ParticipantController::class)->except(['store', 'show']);
 
     Route::get('manager/teams', [TeamController::class, 'getTeamsForManager']);
@@ -70,6 +70,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('teams/{team}/managers', [TeamManagerController::class, 'storeManagerUser']);
 
+    Route::post('invitees/{invitee}/ndoc', [InviteeController::class, 'registerNdoc']);
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
     Route::post('/logout', [LoginController::class, 'logout']);

@@ -66,6 +66,16 @@ class InviteeController extends Controller
         return response()->json($invitee, 200);
     }
 
+    public function registerNdoc(Request $request, Invitee $invitee)
+    {
+        $validated = $request->validate([
+            'ndoc' => 'nullable|string|size:8|unique:invitees,ndoc,' . $invitee->id
+        ]);
+
+        $invitee->update($validated);
+        return response()->json($invitee, 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
