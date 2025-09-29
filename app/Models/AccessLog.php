@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class AccessLog extends Model
 {
     protected $fillable = [
-        'registration_id',
+        'participant_id',
         'person_type',
         'ndoc',
-        'gatekeeper_id',
+        'user_id',
         'action'
     ];
 
-    public function registration()
+    public function participant()
     {
-        return $this->belongsTo(Registration::class);
-    }
-
-    public function gatekeeper()
-    {
-        return $this->belongsTo(EventGatekeeper::class);
+        return $this->belongsTo(Participant::class);
     }
 }

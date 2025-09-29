@@ -16,7 +16,7 @@ class Event extends Model
         'starts_at',
         'finishes_at',
         'banner',
-        'status'
+        'status'    // PENDING, REGISTERING, ACCESSING, CLOSED, FINISHED
     ];
 
     public function organization()

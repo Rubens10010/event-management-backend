@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
+use App\Models\AccessLog;
 use App\Models\Invitee;
 use App\Models\Participant;
 use Illuminate\Http\Request;
@@ -89,9 +90,17 @@ class ParticipantController extends Controller
         ]);
 
         $code = $request->input('code');
-        $participant = Participant::with('invitees', 'team')->where('qr_code', $code)->first();
+        $participant = Participant::with('invitees', 'team')->where('qr_code', $code)->whereNotNull('approved_by')->first();
 
         if ($participant) {
+            AccessLog::create([
+                'participant_id' => $participant->id,
+                'person_type' => 'PARTICIPANT',
+                'ndoc' => $participant->ndoc,
+                'user_id' => $request->user()->id,
+                'action' => 'ENTRY'
+            ]);
+
             return response()->json([
                 'authorized' => true,
                 'participant' => $participant,
@@ -110,9 +119,17 @@ class ParticipantController extends Controller
         ]);
 
         $dni = $request->input('dni');
-        $participant = Participant::with('invitees', 'team')->where('ndoc', $dni)->first();
+        $participant = Participant::with('invitees', 'team')->where('ndoc', $dni)->whereNotNull('approved_by')->first();
 
         if ($participant) {
+            AccessLog::create([
+                'participant_id' => $participant->id,
+                'person_type' => 'PARTICIPANT',
+                'ndoc' => $participant->ndoc,
+                'user_id' => $request->user()->id,
+                'action' => 'ENTRY'
+            ]);
+
             return response()->json([
                 'authorized' => true,
                 'participant' => $participant,
@@ -135,6 +152,15 @@ class ParticipantController extends Controller
 
         if ($invitee) {
             $invitee->load('participant');
+
+            AccessLog::create([
+                'participant_id' => $invitee->participant_id,
+                'person_type' => 'INVITEE',
+                'ndoc' => $invitee->ndoc,
+                'user_id' => $request->user()->id,
+                'action' => 'ENTRY'
+            ]);
+
             return response()->json([
                 'authorized' => true,
                 'invitee' => $invitee,
@@ -143,6 +169,48 @@ class ParticipantController extends Controller
 
         return response()->json([
             'authorized' => false,
+        ], 200);
+    }
+
+    public function logExit(Request $request)
+    {
+        $request->validate([
+            'ndoc' => 'required|digits:8',
+        ]);
+
+        $ndoc = $request->input('ndoc');
+        $didEnter = AccessLog::where('ndoc', $ndoc)
+            ->where('action', 'ENTRY')
+            ->latest()
+            ->first();
+
+        if (!$didEnter) {
+            abort(403, 'La persona no cuenta con un registro de ingreso');
+        }
+
+        $participante = Participant::where('ndoc', $ndoc)->first();
+        $person_type = 'PARTICIPANT';
+        $name = $participante->full_name;
+        if (!$participante) {
+            $invitado = Invitee::where('ndoc', $ndoc)->first();
+            if (!$invitado) {
+                abort(403, 'La persona no esta autorizada para ingresar al evento');
+            }
+            $participante = $invitado->participante;
+            $person_type = 'INVITEE';
+            $name = $invitado->full_name;
+        }
+
+        AccessLog::create([
+            'participant_id' => $participante->id,
+            'person_type' => $person_type,
+            'ndoc' => $ndoc,
+            'user_id' => $request->user()->id,
+            'action' => 'EXIT'
+        ]);
+
+        return response()->json([
+            'name' => $name
         ], 200);
     }
 }
