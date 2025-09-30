@@ -6,17 +6,29 @@ use App\Http\Requests\StoreParticipantRequest;
 use App\Http\Requests\UpdateParticipantRequest;
 use App\Models\AccessLog;
 use App\Models\Invitee;
-use App\Models\Participant;
 use Illuminate\Http\Request;
+use App\Models\Participant;
 
 class ParticipantController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        return Participant::all();
+        $search = $request->query('search');
+
+        $query = Participant::with('team');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('ndoc', 'like', '%' . $search . '%')
+                    ->orWhere('full_name', 'ilike', '%' . $search . '%');
+            });
+        }
+
+        return $query->get();
     }
 
     /**
