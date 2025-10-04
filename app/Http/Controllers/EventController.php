@@ -78,14 +78,14 @@ class EventController extends Controller
         $capacidadMaxima = $event->capacity;
 
         $capacidadActual = DB::table('access_logs as a')
-            ->select('a.participant_id', 'a.person_type', DB::raw('MAX(a.created_at) as last_action_time'))
+            ->select('a.participant_id', 'a.person_type', DB::raw('MAX(a.id) as last_id'))
             ->join(
-                DB::raw('(SELECT participant_id, MAX(created_at) as max_time 
+                DB::raw('(SELECT participant_id, MAX(id) as max_id 
                      FROM access_logs 
                      GROUP BY participant_id) b'),
                 function ($join) {
                     $join->on('a.participant_id', '=', 'b.participant_id')
-                        ->on('a.created_at', '=', 'b.max_time');
+                        ->on('a.id', '=', 'b.max_id');
                 }
             )
             ->where('a.action', 'ENTRY')
@@ -105,12 +105,12 @@ class EventController extends Controller
             ->join('teams as t', 'p.team_id', '=', 't.id')
             ->select('t.id as team_id', 't.name as team_name', DB::raw('COUNT(*) as entry_total'))
             ->join(
-                DB::raw('(SELECT participant_id, MAX(created_at) as max_time 
+                DB::raw('(SELECT participant_id, MAX(id) as max_id 
                  FROM access_logs 
                  GROUP BY participant_id) b'),
                 function ($join) {
                     $join->on('a.participant_id', '=', 'b.participant_id')
-                        ->on('a.created_at', '=', 'b.max_time');
+                        ->on('a.id', '=', 'b.max_id');
                 }
             )
             ->where('a.action', 'ENTRY')

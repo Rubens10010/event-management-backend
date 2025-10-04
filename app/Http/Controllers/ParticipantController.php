@@ -105,6 +105,17 @@ class ParticipantController extends Controller
         $participant = Participant::with('invitees', 'team')->where('qr_code', $code)->whereNotNull('approved_by')->first();
 
         if ($participant) {
+            $latest_action = AccessLog::where('participant_id', $participant->id)
+                ->latest()
+                ->first();
+
+            if ($latest_action->action === 'ENTRY') {
+                return response()->json([
+                    'authorized' => false,
+                    'message' => 'El participante ya ha ingresado y no ha registrado su salida.',
+                ], 200);
+            }
+
             AccessLog::create([
                 'participant_id' => $participant->id,
                 'person_type' => 'PARTICIPANT',
